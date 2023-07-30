@@ -13,3 +13,4 @@ build/
 node_modules/
 .npmignore
 .git*
+tsconfig.json

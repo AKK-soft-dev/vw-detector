@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.breakpoints = void 0;
-exports.breakpoints = {
+export const breakpoints = {
     xs: 0,
     sm: 564,
     md: 768,
@@ -13,17 +10,17 @@ exports.breakpoints = {
         return ["up", this[breakpointName]];
     },
     down: function (breakpointName) {
-        var breakpoint = this[breakpointName];
-        var res = undefined;
+        const breakpoint = this[breakpointName];
+        let res = undefined;
         if (typeof breakpoint === "number") {
             res = breakpoint - this.step / 100;
         }
         return ["down", res];
     },
     between: function (fromBreakpointName, toBreakpointName) {
-        var breakpoint1 = this[fromBreakpointName];
-        var breakpoint2 = this[toBreakpointName];
-        var res = undefined;
+        const breakpoint1 = this[fromBreakpointName];
+        const breakpoint2 = this[toBreakpointName];
+        let res = undefined;
         if (typeof breakpoint1 === "number" && typeof breakpoint2 === "number") {
             res = [breakpoint1, breakpoint2 - this.step / 100];
         }
