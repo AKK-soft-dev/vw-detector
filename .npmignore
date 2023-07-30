@@ -1,7 +1,5 @@
 # Files and folders to exclude from the npm package
 src/
-*.ts
-*.tsx
 *.log
 *.test.*
 __tests__/
