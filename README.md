@@ -1,0 +1,3 @@
+# VW Detector
+
+A lib that can be used to detect viewport width. Still in progress...
