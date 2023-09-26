@@ -33,10 +33,14 @@ export const VW: VWType = {
       ...breakpointsSetter(prevBreakpointValues),
     };
   },
+  matchesMediaQuery: function (mediaQuery) {
+    return detect(mediaQuery);
+  },
   subscribeMediaQuery: function (mediaQuery, callback) {
     // to prevent invoking every times resize
     let invokedCallback = false;
-    window.addEventListener("resize", () => {
+
+    const detector = () => {
       const matchesMediaQuery = detect(mediaQuery);
       if (typeof callback === "function") {
         if (matchesMediaQuery && !invokedCallback) {
@@ -47,7 +51,11 @@ export const VW: VWType = {
           callback(matchesMediaQuery);
         }
       }
-    });
-    return detect(mediaQuery);
+    };
+    window.addEventListener("resize", detector);
+
+    return () => {
+      window.removeEventListener("resize", detector);
+    };
   },
 };

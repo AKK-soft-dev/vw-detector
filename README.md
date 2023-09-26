@@ -7,7 +7,7 @@ A lib that can be used to detect viewport width. You can use it to apply viewpor
 ```js
 import VW from "vw-detector";
 
-const { subscribeMediaQuery, breakpoints } = VW;
+const { matchesMediaQuery, subscribeMediaQuery, breakpoints } = VW;
 
 // customizing breakpoints
 VW.configureBreakpoints((previousBreakpoints) => ({
@@ -17,8 +17,11 @@ VW.configureBreakpoints((previousBreakpoints) => ({
   step: 2, // prevent query matching conflict, default 5
 }));
 
-// registering callback
-const downSm = subscribeMediaQuery(breakpoints.down("sm"), (matches) => {
+const downSm = matchesMediaQuery(breakpoints.down("sm"));
+console.log(downSm); // true (or) false
+
+// subscribe callback
+const unsubscribe = subscribeMediaQuery(breakpoints.down("sm"), (matches) => {
   // this callback will be invoked once if the media query matches
   // we need to type guard to prevent running callback body multiple times
   if (matches) {
@@ -26,11 +29,14 @@ const downSm = subscribeMediaQuery(breakpoints.down("sm"), (matches) => {
   }
 });
 
-const upSm = subscribeMediaQuery(breakpoints.up("sm"));
+unsubscribe(); // unsubscribe callback
 
-const onlySm = subscribeMediaQuery(breakpoints.only("sm"));
+// You can use other ways
+subscribeMediaQuery(breakpoints.up("sm"));
 
-const betweenSmAndLg = subscribeMediaQuery(breakpoints.between("sm", "lg"));
+subscribeMediaQuery(breakpoints.only("sm"));
+
+subscribeMediaQuery(breakpoints.between("sm", "lg"));
 ```
 
 ## Default breakpoint values
@@ -63,6 +69,7 @@ declare module 'vw-detector/dist/types' {
 `VW` has the following properties :
 
 - `configureBreakpoints`
+- `matchesMediaQuery`
 - `subscribeMediaQuery`
 - `breakpoints`
 
@@ -80,18 +87,27 @@ VW.configureBreakpoints((previousBreakpoints) => ({
 }));
 ```
 
-### **subscribeMediaQuery**
+### **matchesMediaQuery**
 
-Can be used to subscribe optional callback to be invoked on media query matches and it returns boolean type indicating whether or not media query matches. Unlike callback function, its returned value will not be dynamic.
+Can be used to detect when this function is invoked. Return boolean.
 
 ```js
-const downSm = subscribeMediaQuery(breakpoints.down("sm"), (matches) => {
+const notSm = matchesMediaQuery(breakpoints.not("sm"));
+console.log(notSm); // true (or) false
+```
+
+### **subscribeMediaQuery**
+
+Can be used to subscribe optional callback to be invoked on media query matches. It returns function to unsubscribe callback.
+
+```js
+const unsubscribe = subscribeMediaQuery(breakpoints.down("sm"), (matches) => {
   if (matches) {
     console.log("media query matches with the current viewport width");
   }
 });
 
-console.log(downSm); // true (or) false
+unsubscribe(); // unsubscribe callback
 ```
 
 ### **breakpoints**

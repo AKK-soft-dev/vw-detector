@@ -32,8 +32,9 @@ export interface VW {
   configureBreakpoints?: (
     breakpointsSetter: (breakpoints: BreakpointValues) => BreakpointValues
   ) => void;
+  matchesMediaQuery: (mediaQuery: MediaQuery) => boolean;
   subscribeMediaQuery: (
     mediaQuery: MediaQuery,
     callback?: (matches: boolean) => void
-  ) => boolean;
+  ) => () => void;
 }
