@@ -1,6 +1,6 @@
 # VW Detector
 
-A lib that can be used to detect viewport width. You can use it to apply view port specific features.
+A lib that can be used to detect viewport width. You can use it to apply viewport specific features.
 
 ## Usage
 
