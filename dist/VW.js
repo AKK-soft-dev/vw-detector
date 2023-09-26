@@ -1,33 +1,51 @@
-import { breakpoints } from "./breakpoints";
+import { initialBreakpoints } from "./breakpoints";
+const detect = (mediaQuery) => {
+    const vw = window.innerWidth;
+    switch (mediaQuery[0]) {
+        case "up": {
+            return vw >= mediaQuery[1];
+        }
+        case "down": {
+            return vw <= mediaQuery[1];
+        }
+        case "not": {
+            return vw !== mediaQuery[1];
+        }
+        case "only": {
+            return vw === mediaQuery[1];
+        }
+        case "between": {
+            const [from, to] = mediaQuery[1];
+            return vw >= from && vw <= to;
+        }
+    }
+    return false;
+};
 export const VW = {
-    breakpoints: breakpoints,
+    breakpoints: initialBreakpoints,
     configureBreakpoints: function (breakpointsSetter) {
-        const { up, down, between, not, ...breakpoints } = this.breakpoints;
-        this.breakpoints = {
-            ...this.breakpoints,
-            ...breakpointsSetter(breakpoints),
+        const prevBreakpointValues = this.breakpoints.values;
+        this.breakpoints.values = {
+            ...prevBreakpointValues,
+            ...breakpointsSetter(prevBreakpointValues),
         };
     },
-    useMediaQuery: function (mediaQuery, callback) {
-        const vw = window.innerWidth;
-        switch (mediaQuery[0]) {
-            case "up": {
-                return vw >= mediaQuery[1];
+    subscribeMediaQuery: function (mediaQuery, callback) {
+        // to prevent invoking every times resize
+        let invokedCallback = false;
+        window.addEventListener("resize", () => {
+            const matchesMediaQuery = detect(mediaQuery);
+            if (typeof callback === "function") {
+                if (matchesMediaQuery && !invokedCallback) {
+                    invokedCallback = true;
+                    callback(matchesMediaQuery);
+                }
+                else if (!matchesMediaQuery) {
+                    invokedCallback = false;
+                    callback(matchesMediaQuery);
+                }
             }
-            case "down": {
-                return vw <= mediaQuery[1];
-            }
-            case "not": {
-                return vw !== mediaQuery[1];
-            }
-            case "only": {
-                return vw === mediaQuery[1];
-            }
-            case "between": {
-                const [from, to] = mediaQuery[1];
-                return vw >= from && vw <= to;
-            }
-        }
-        return false;
+        });
+        return detect(mediaQuery);
     },
 };

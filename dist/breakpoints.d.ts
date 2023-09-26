@@ -1,2 +1,2 @@
 import { Breakpoints } from "./types";
-export declare const breakpoints: Breakpoints;
+export declare const initialBreakpoints: Breakpoints;

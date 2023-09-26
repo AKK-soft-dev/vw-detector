@@ -1,37 +1,39 @@
 import { Breakpoints, MediaQuery } from "./types";
 
-export const breakpoints: Breakpoints = {
-  xs: 0,
-  sm: 564,
-  md: 768,
-  lg: 992,
-  xl: 1048,
-  xxl: 1200,
-  step: 5,
+export const initialBreakpoints: Breakpoints = {
+  values: {
+    xs: 0,
+    sm: 576,
+    md: 768,
+    lg: 992,
+    xl: 1200,
+    xxl: 1400,
+    step: 5,
+  },
   up: function (breakpointName) {
-    return ["up", this[breakpointName]];
+    return ["up", this.values[breakpointName]];
   },
   down: function (breakpointName) {
-    const breakpoint = this[breakpointName];
+    const breakpoint = this.values[breakpointName];
     let res = undefined;
     if (typeof breakpoint === "number") {
-      res = breakpoint - this.step / 100;
+      res = breakpoint - this.values.step / 100;
     }
     return ["down", res];
   },
   between: function (fromBreakpointName, toBreakpointName) {
-    const breakpoint1 = this[fromBreakpointName];
-    const breakpoint2 = this[toBreakpointName];
+    const breakpoint1 = this.values[fromBreakpointName];
+    const breakpoint2 = this.values[toBreakpointName];
     let res = undefined;
     if (typeof breakpoint1 === "number" && typeof breakpoint2 === "number") {
-      res = [breakpoint1, breakpoint2 - this.step / 100];
+      res = [breakpoint1, breakpoint2 - this.values.step / 100];
     }
     return ["between", res] as MediaQuery;
   },
   not: function (breakpointName) {
-    return ["not", this[breakpointName]];
+    return ["not", this.values[breakpointName]];
   },
   only: function (breakpointName) {
-    return ["only", this[breakpointName]];
+    return ["only", this.values[breakpointName]];
   },
 };
