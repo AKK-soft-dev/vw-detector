@@ -28,10 +28,7 @@ export const VW: VWType = {
   breakpoints: initialBreakpoints,
   configureBreakpoints: function (breakpointsSetter) {
     const prevBreakpointValues = this.breakpoints.values;
-    this.breakpoints.values = {
-      ...prevBreakpointValues,
-      ...breakpointsSetter(prevBreakpointValues),
-    };
+    this.breakpoints.values = breakpointsSetter(prevBreakpointValues);
   },
   matchesMediaQuery: function (mediaQuery) {
     return detect(mediaQuery);

@@ -39,6 +39,63 @@ subscribeMediaQuery(breakpoints.only("sm"));
 subscribeMediaQuery(breakpoints.between("sm", "lg"));
 ```
 
+## React reusable custom hook
+
+If want to use this library in your React application, copy and paste this in your project :
+
+```js
+import { useEffect, useRef, useState } from "react";
+import VW from "vw-detector";
+
+const { matchesMediaQuery, subscribeMediaQuery, breakpoints } = VW;
+
+export default function useMediaQuery(mediaQuery) {
+  // For initial value, check if current viewport width matches with the provided mediaQuery.
+  const [matches, setMatches] = useState(matchesMediaQuery(mediaQuery));
+
+  // To prevent setting same value multiple times.
+  const prevMatches = useRef(matches);
+
+  // We need to stringify media query to pass it into useEffect deps because breakpoints utility functions return array type..
+  // It will be new reference on every renders.
+  // For better performance, I will refactor returning array soon.
+  const stringifiedMediaQuery = JSON.stringify(mediaQuery);
+
+  useEffect(() => {
+    const unsubscribe = subscribeMediaQuery(
+      JSON.parse(stringifiedMediaQuery), // We need to parse stringified media query to transform it into array.
+      (matches) => {
+        if (prevMatches.current !== matches) {
+          prevMatches.current = matches;
+          setMatches(matches);
+        }
+      }
+    );
+
+    return () => {
+      unsubscribe();
+    };
+  }, [stringifiedMediaQuery, breakpoints, subscribeMediaQuery]);
+
+  return matches;
+}
+```
+
+And you can use it in your component like this :
+
+```js
+import VW from "vw-detector";
+import useMediaQuery from "./useMediaQuery";
+
+export default function VWTest() {
+  const downSm = useMediaQuery(VW.breakpoints.down("sm"));
+
+  console.log(downSm);
+
+  //...
+}
+```
+
 ## Default breakpoint values
 
 ```js
