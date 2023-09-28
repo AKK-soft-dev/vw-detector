@@ -1,5 +1,8 @@
 import { initialBreakpoints } from "./breakpoints";
+const isOnServer = () => typeof window === "undefined";
 const detect = (mediaQuery) => {
+    if (isOnServer())
+        return false;
     const vw = window.innerWidth;
     switch (mediaQuery[0]) {
         case "up": {
@@ -25,9 +28,12 @@ export const VW = {
     breakpoints: initialBreakpoints,
     configureBreakpoints: function (breakpointsSetter) {
         const prevBreakpointValues = this.breakpoints.values;
+        const newBreakpointValues = breakpointsSetter(prevBreakpointValues);
         this.breakpoints.values = {
-            ...prevBreakpointValues,
             ...breakpointsSetter(prevBreakpointValues),
+            ...(!Object.hasOwn(newBreakpointValues, "step")
+                ? { step: prevBreakpointValues.step }
+                : {}),
         };
     },
     matchesMediaQuery: function (mediaQuery) {
@@ -36,6 +42,7 @@ export const VW = {
     subscribeMediaQuery: function (mediaQuery, callback) {
         // to prevent invoking every times resize
         let invokedCallback = false;
+        const isOnClient = !isOnServer();
         const detector = () => {
             const matchesMediaQuery = detect(mediaQuery);
             if (typeof callback === "function") {
@@ -49,9 +56,9 @@ export const VW = {
                 }
             }
         };
-        window.addEventListener("resize", detector);
+        isOnClient && window.addEventListener("resize", detector);
         return () => {
-            window.removeEventListener("resize", detector);
+            isOnClient && window.removeEventListener("resize", detector);
         };
     },
 };
