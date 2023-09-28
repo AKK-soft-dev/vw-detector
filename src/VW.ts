@@ -1,7 +1,11 @@
 import { initialBreakpoints } from "./breakpoints";
 import { MediaQuery, VW as VWType } from "./types";
 
+const isOnServer = () => typeof window === "undefined";
+
 const detect = (mediaQuery: MediaQuery) => {
+  if (isOnServer()) return false;
+
   const vw = window.innerWidth;
   switch (mediaQuery[0]) {
     case "up": {
@@ -36,6 +40,7 @@ export const VW: VWType = {
   subscribeMediaQuery: function (mediaQuery, callback) {
     // to prevent invoking every times resize
     let invokedCallback = false;
+    const isOnClient = !isOnServer();
 
     const detector = () => {
       const matchesMediaQuery = detect(mediaQuery);
@@ -49,10 +54,10 @@ export const VW: VWType = {
         }
       }
     };
-    window.addEventListener("resize", detector);
+    isOnClient && window.addEventListener("resize", detector);
 
     return () => {
-      window.removeEventListener("resize", detector);
+      isOnClient && window.removeEventListener("resize", detector);
     };
   },
 };

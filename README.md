@@ -41,7 +41,7 @@ subscribeMediaQuery(breakpoints.between("sm", "lg"));
 
 ## React reusable custom hook
 
-If want to use this library in your React application, copy and paste this in your project :
+If you want to use this library in your React application, copy and paste this in your project and modify it base on your needs :
 
 ```js
 import { useEffect, useRef, useState } from "react";
@@ -120,6 +120,13 @@ declare module 'vw-detector/dist/types' {
   }
 }
 ```
+
+## Version
+
+### `2.0.1`
+
+- `configureBreakpoints` will not merge with your returned value meaning that you should do it on your own within your callback function as it receives previous configured or default breakpoint values.
+- Added type safe for SSR applications. `matchesMediaQuery` will return false if your app is running on server.
 
 ## API Reference
 
