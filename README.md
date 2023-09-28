@@ -123,7 +123,7 @@ declare module 'vw-detector/dist/types' {
 
 ## Version
 
-### `2.0.1`
+### `2.0.2`
 
 - `configureBreakpoints` will not merge with your returned value meaning that you should do it on your own within your callback function as it receives previous configured or default breakpoint values.
 - Added type safe for SSR applications. `matchesMediaQuery` will return false if your app is running on server.
