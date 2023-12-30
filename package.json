@@ -5,7 +5,7 @@
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AKK-soft-dev/vw-detector.git"
+    "url": "git+https://github.com/aungkoko-coding/vw-detector.git"
   },
   "keywords": [
     "viewport",
@@ -14,7 +14,7 @@
   ],
   "author": "Aung Ko Ko",
   "license": "MIT",
-  "homepage": "https://github.com/AKK-soft-dev/vw-detector#readme",
+  "homepage": "https://github.com/aungkoko-coding/vw-detector#readme",
   "scripts": {
     "build": "tsc --watch"
   },
