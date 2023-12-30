@@ -75,7 +75,7 @@ export default function useMediaQuery(mediaQuery) {
     return () => {
       unsubscribe();
     };
-  }, [stringifiedMediaQuery, breakpoints, subscribeMediaQuery]);
+  }, [stringifiedMediaQuery]);
 
   return matches;
 }
